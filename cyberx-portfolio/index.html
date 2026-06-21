@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CYBERX — Saria Amine</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --cyan:#00D4FF;--red:#FF3300;--gold:#FFB800;
+  --white:#F0F4FF;--mid:rgba(220,235,255,0.55);--dim:rgba(220,235,255,0.22);
+  --navy:#060D1F;--space1:#080E22;--space2:#0A1128;--space3:#0C1535;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--navy);color:var(--white);font-family:"Space Grotesk",sans-serif;overflow-x:hidden;cursor:none;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--navy);}::-webkit-scrollbar-thumb{background:var(--cyan);}
+
+/* SPACE CANVAS — fixed full page */
+#space-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* CURSOR */
+#cursor{position:fixed;width:10px;height:10px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:screen;}
+#cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(0,212,255,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.1rem 3rem;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(6,13,31,.97) 0%,transparent 100%);border-bottom:1px solid rgba(0,212,255,.06);}
+.nav-logo{font-family:"Orbitron",monospace;font-size:.95rem;font-weight:900;color:var(--white);letter-spacing:.15em;}
+.nav-logo span{color:var(--cyan);}
+.nav-tag{font-family:"Share Tech Mono",monospace;font-size:.55rem;color:var(--gold);letter-spacing:.2em;display:flex;align-items:center;gap:.5rem;margin-left:1rem;}
+.nav-tag::before{content:"";width:18px;height:1px;background:var(--gold);}
+.nav-links{display:flex;gap:2rem;}
+.nav-links a{font-family:"Orbitron",monospace;font-size:.5rem;letter-spacing:.18em;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--cyan);}
+.nav-cta{font-family:"Orbitron",monospace;font-size:.5rem;letter-spacing:.18em;color:var(--navy);background:var(--cyan);padding:.45rem 1.1rem;text-decoration:none;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:background .2s;}
+.nav-cta:hover{background:var(--white);}
+
+/* ALL SECTIONS above canvas */
+section{position:relative;z-index:1;}
+
+/* ── HERO ── */
+#hero{height:100vh;display:flex;align-items:center;overflow:hidden;}
+
+/* floating lightning lines */
+.eline{position:absolute;height:1px;opacity:0;pointer-events:none;z-index:2;animation:efl 4s infinite;}
+@keyframes efl{0%,83%,100%{opacity:0;}84%{opacity:.9;}86%{opacity:.15;}88%{opacity:1;}90%{opacity:0;}}
+
+.photo-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;width:460px;height:560px;}
+.hero-photo{width:100%;height:100%;object-fit:cover;object-position:top center;filter:grayscale(90%) contrast(1.1) brightness(.85);mask-image:linear-gradient(to bottom,black 50%,transparent 100%);-webkit-mask-image:linear-gradient(to bottom,black 50%,transparent 100%);transition:transform .15s ease-out;}
+.photo-glow{position:absolute;inset:-30px;background:radial-gradient(ellipse at 50% 60%,rgba(0,212,255,.12) 0%,rgba(100,0,200,.08) 40%,transparent 70%);pointer-events:none;animation:pglow 4s ease-in-out infinite alternate;}
+@keyframes pglow{0%{opacity:.6;}100%{opacity:1;}}
+.hc{position:absolute;width:20px;height:20px;}
+.hc.tl{top:0;left:0;border-top:1.5px solid var(--cyan);border-left:1.5px solid var(--cyan);}
+.hc.tr{top:0;right:0;border-top:1.5px solid var(--cyan);border-right:1.5px solid var(--cyan);}
+.hc.bl{bottom:0;left:0;border-bottom:1.5px solid var(--cyan);border-left:1.5px solid var(--cyan);}
+.hc.br{bottom:0;right:0;border-bottom:1.5px solid var(--cyan);border-right:1.5px solid var(--cyan);}
+
+.hero-left{position:absolute;left:4vw;top:50%;transform:translateY(-50%);z-index:3;max-width:370px;}
+.eyebrow{font-family:"Share Tech Mono",monospace;font-size:.56rem;color:var(--gold);letter-spacing:.28em;display:flex;align-items:center;gap:.7rem;margin-bottom:1.4rem;}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--gold);}
+.hname{font-family:"Orbitron",monospace;font-size:clamp(1.9rem,3.8vw,3.6rem);font-weight:900;line-height:1.02;color:var(--white);margin-bottom:.6rem;letter-spacing:-.02em;text-shadow:0 0 40px rgba(0,212,255,.2);}
+.htag{font-size:.85rem;font-weight:300;color:var(--mid);letter-spacing:.05em;margin-bottom:1.8rem;line-height:1.6;}
+.quote-box{border:1px solid rgba(0,212,255,.18);padding:.95rem 1.1rem;background:rgba(6,13,31,.75);backdrop-filter:blur(12px);margin-bottom:1.6rem;position:relative;}
+.quote-box::before{content:"";position:absolute;top:-1px;left:0;width:38%;height:1.5px;background:var(--cyan);}
+.quote-box::after{content:"";position:absolute;bottom:-1px;right:0;width:20%;height:1.5px;background:rgba(255,51,0,.5);}
+.qtext{font-size:.83rem;font-style:italic;color:var(--white);line-height:1.65;margin-bottom:.45rem;}
+.qattr{font-family:"Share Tech Mono",monospace;font-size:.5rem;color:var(--gold);letter-spacing:.18em;}
+.cta{display:flex;gap:.9rem;flex-wrap:wrap;}
+.btn-p{font-family:"Orbitron",monospace;font-size:.56rem;letter-spacing:.16em;color:var(--navy);background:var(--cyan);padding:.72rem 1.5rem;text-decoration:none;font-weight:700;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s;display:inline-block;box-shadow:0 0 20px rgba(0,212,255,.3);}
+.btn-p:hover{background:var(--white);box-shadow:0 0 30px rgba(0,212,255,.5);}
+.btn-g{font-family:"Orbitron",monospace;font-size:.56rem;letter-spacing:.16em;color:var(--cyan);border:1px solid rgba(0,212,255,.3);padding:.72rem 1.5rem;text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s;display:inline-block;}
+.btn-g:hover{border-color:var(--cyan);background:rgba(0,212,255,.06);}
+
+.hero-right{position:absolute;right:3.5vw;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;gap:.75rem;}
+.hud{border:1px solid rgba(0,212,255,.14);padding:.7rem .95rem;background:rgba(6,13,31,.82);backdrop-filter:blur(12px);min-width:150px;position:relative;}
+.hud::before{content:"";position:absolute;top:0;left:0;width:28%;height:1px;background:var(--cyan);}
+.hl{font-family:"Share Tech Mono",monospace;font-size:.46rem;color:var(--gold);letter-spacing:.16em;margin-bottom:.3rem;}
+.hv{font-family:"Orbitron",monospace;font-size:1.15rem;font-weight:700;color:var(--cyan);line-height:1;text-shadow:0 0 20px rgba(0,212,255,.4);}
+.hs{font-family:"Share Tech Mono",monospace;font-size:.43rem;color:var(--dim);letter-spacing:.1em;margin-top:.22rem;}
+.hbar{height:2px;background:rgba(0,212,255,.1);margin-top:.45rem;border-radius:2px;overflow:hidden;}
+.hbar-f{height:100%;background:linear-gradient(90deg,var(--cyan),rgba(255,51,0,.7));border-radius:2px;animation:bgrow 2s ease forwards;}
+@keyframes bgrow{from{width:0%;}to{width:var(--w);}}
+
+.scroll-h{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:3;text-align:center;}
+.scroll-h span{font-family:"Share Tech Mono",monospace;font-size:.46rem;color:var(--dim);letter-spacing:.28em;display:block;margin-bottom:.45rem;}
+.scroll-l{width:1px;height:36px;background:linear-gradient(to bottom,var(--cyan),transparent);margin:0 auto;animation:sp 2s ease-in-out infinite;}
+@keyframes sp{0%,100%{opacity:.3;}50%{opacity:1;}}
+
+/* ── TRANSITION ── */
+#transition{min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.tt{position:relative;z-index:2;text-align:center;padding:0 2rem;}
+.t1{font-family:"Orbitron",monospace;font-size:clamp(.65rem,1.1vw,.85rem);color:var(--mid);letter-spacing:.28em;margin-bottom:1.4rem;opacity:0;transform:translateY(28px);transition:all .8s ease;}
+.t2{font-family:"Orbitron",monospace;font-size:clamp(2rem,5.5vw,5.2rem);font-weight:900;color:var(--white);line-height:.95;letter-spacing:-.02em;opacity:0;transform:translateY(28px);transition:all .8s ease .3s;text-shadow:0 0 60px rgba(0,212,255,.15);}
+.t2 .glow{color:var(--cyan);text-shadow:0 0 40px rgba(0,212,255,.7);}
+.t3{font-size:clamp(.8rem,1.3vw,.95rem);font-weight:300;color:var(--mid);margin-top:1.6rem;letter-spacing:.1em;opacity:0;transform:translateY(18px);transition:all .8s ease .6s;}
+.t1.v,.t2.v,.t3.v{opacity:1;transform:translateY(0);}
+
+/* ── SECTION COMMONS ── */
+.sw{padding:7rem 6vw;}
+.seye{font-family:"Share Tech Mono",monospace;font-size:.54rem;color:var(--gold);letter-spacing:.26em;display:flex;align-items:center;gap:.9rem;margin-bottom:.7rem;}
+.seye::before{content:"";width:26px;height:1px;background:var(--gold);}
+.stitle{font-family:"Orbitron",monospace;font-size:clamp(1.7rem,3.2vw,3rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:1.7rem;}
+.stitle .ac{color:var(--cyan);}.stitle .ar{color:var(--red);}
+
+/* section backgrounds — SPACE LAYERS with transparency */
+#about{background:linear-gradient(135deg,rgba(8,14,34,.85) 0%,rgba(12,18,45,.8) 50%,rgba(8,14,34,.85) 100%);backdrop-filter:blur(2px);}
+#projects{background:linear-gradient(135deg,rgba(10,16,38,.88) 0%,rgba(6,10,28,.85) 100%);backdrop-filter:blur(2px);}
+#skills{background:linear-gradient(135deg,rgba(8,14,34,.85) 0%,rgba(14,10,35,.82) 100%);backdrop-filter:blur(2px);}
+#experience{background:linear-gradient(135deg,rgba(10,16,38,.88) 0%,rgba(8,14,34,.85) 100%);backdrop-filter:blur(2px);}
+#contact{background:linear-gradient(135deg,rgba(8,14,34,.85) 0%,rgba(12,8,30,.85) 100%);backdrop-filter:blur(2px);}
+
+/* ── ABOUT ── */
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;margin-top:2.5rem;}
+.at p{font-size:.93rem;color:var(--mid);line-height:1.9;margin-bottom:1rem;}
+.at p strong{color:var(--cyan);}
+.as{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(0,212,255,.07);}
+.sb{background:rgba(6,13,31,.9);padding:1.7rem 1.3rem;border-top:2px solid transparent;transition:all .3s;}
+.sb:hover{border-top-color:var(--cyan);background:rgba(10,20,50,.9);}
+.sn{font-family:"Orbitron",monospace;font-size:1.9rem;font-weight:900;color:var(--cyan);line-height:1;margin-bottom:.3rem;text-shadow:0 0 20px rgba(0,212,255,.35);}
+.sl{font-family:"Share Tech Mono",monospace;font-size:.5rem;color:var(--dim);letter-spacing:.16em;}
+
+/* ── PROJECTS ── */
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1px;background:rgba(0,212,255,.04);margin-top:2.5rem;}
+.pc{background:rgba(6,13,31,.88);padding:1.9rem;position:relative;overflow:hidden;transition:all .3s;border:1px solid rgba(0,212,255,.05);}
+.pc:hover{background:rgba(10,20,50,.95);border-color:rgba(0,212,255,.15);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,212,255,.08);}
+.pc::after{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:0;transition:opacity .3s;}
+.pc:hover::after{opacity:1;}
+.pnum{position:absolute;right:1.2rem;top:.8rem;font-family:"Orbitron",monospace;font-size:3.2rem;font-weight:900;color:rgba(0,212,255,.04);line-height:1;user-select:none;}
+.pst{display:inline-flex;align-items:center;gap:.3rem;font-family:"Share Tech Mono",monospace;font-size:.46rem;letter-spacing:.12em;padding:.16rem .5rem;border:1px solid;margin-bottom:.8rem;}
+.pst.live{color:var(--cyan);border-color:rgba(0,212,255,.3);}
+.pst.live::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--cyan);animation:blink 1.5s infinite;}
+.pst.prog{color:var(--gold);border-color:rgba(255,184,0,.3);}
+.pst.done{color:var(--mid);border-color:rgba(220,235,255,.15);}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.pcat{font-family:"Share Tech Mono",monospace;font-size:.48rem;color:var(--cyan);letter-spacing:.16em;margin-bottom:.45rem;}
+.pname{font-family:"Orbitron",monospace;font-size:.92rem;font-weight:700;color:var(--white);margin-bottom:.22rem;letter-spacing:.04em;}
+.psub{font-size:.68rem;color:var(--dim);margin-bottom:.85rem;font-style:italic;}
+.pdesc{font-size:.8rem;color:var(--mid);line-height:1.75;margin-bottom:1rem;}
+.pmets{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.75rem;}
+.met{font-size:.62rem;color:var(--cyan);background:rgba(0,212,255,.08);padding:.16rem .5rem;border-radius:2px;}
+.pstk{display:flex;flex-wrap:wrap;gap:.3rem;}
+.stk{font-family:"Share Tech Mono",monospace;font-size:.52rem;color:var(--dim);border:1px solid rgba(220,235,255,.09);padding:.1rem .42rem;}
+
+/* ── SKILLS ── */
+.skg{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:rgba(0,212,255,.05);margin-top:2.5rem;}
+.skc{background:rgba(6,13,31,.88);padding:1.7rem;border-top:2px solid var(--cyan);transition:all .3s;}
+.skc:nth-child(even){border-top-color:var(--red);}
+.skc:hover{background:rgba(10,20,50,.95);}
+.skcn{font-family:"Orbitron",monospace;font-size:.58rem;letter-spacing:.16em;color:var(--cyan);margin-bottom:1rem;}
+.skc:nth-child(even) .skcn{color:var(--red);}
+.ski{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;}
+.skd{width:3px;height:3px;border-radius:50%;background:var(--cyan);flex-shrink:0;}
+.skc:nth-child(even) .skd{background:var(--red);}
+.skn{font-size:.8rem;color:var(--mid);}
+
+/* ── EXPERIENCE ── */
+.eg{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;margin-top:2.5rem;}
+.tl{position:relative;padding-left:1.8rem;border-left:1px solid rgba(0,212,255,.12);}
+.tli{margin-bottom:2rem;position:relative;}
+.tld{position:absolute;left:-2.15rem;top:3px;width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px rgba(0,212,255,.6);}
+.tld.r{background:var(--red);box-shadow:0 0 12px rgba(255,51,0,.6);}
+.tld.gold{background:var(--gold);box-shadow:0 0 12px rgba(255,184,0,.6);}
+.tly{font-family:"Share Tech Mono",monospace;font-size:.52rem;color:var(--gold);letter-spacing:.16em;margin-bottom:.3rem;}
+.tlbadge{font-family:"Share Tech Mono",monospace;font-size:.42rem;color:var(--cyan);border:1px solid rgba(0,212,255,.3);padding:.08rem .38rem;letter-spacing:.1em;margin-left:.5rem;}
+.tlr{font-family:"Orbitron",monospace;font-size:.8rem;font-weight:700;color:var(--white);margin-bottom:.18rem;}
+.tlo{font-size:.72rem;color:var(--cyan);margin-bottom:.5rem;}
+.tldesc{font-size:.78rem;color:var(--mid);line-height:1.7;}
+.cl{display:flex;flex-direction:column;gap:.45rem;}
+.cr{display:flex;align-items:center;justify-content:space-between;padding:.7rem .85rem;background:rgba(6,13,31,.88);border:1px solid rgba(0,212,255,.07);transition:all .2s;gap:.6rem;}
+.cr:hover{border-color:rgba(0,212,255,.22);background:rgba(10,20,50,.95);}
+.cn{font-size:.76rem;color:var(--mid);flex:1;line-height:1.3;}
+.cb{font-family:"Share Tech Mono",monospace;font-size:.43rem;color:#fff;padding:.16rem .42rem;letter-spacing:.07em;flex-shrink:0;}
+.cb.cisco{background:#1B5EBE;}.cb.anth{background:#8B2020;}.cb.oth{background:#2D5A2D;}
+
+/* ── CONTACT ── */
+.ciw{max-width:660px;}
+.cline{font-family:"Orbitron",monospace;font-size:clamp(1.7rem,3.5vw,3.5rem);font-weight:900;line-height:1.1;margin-bottom:1.2rem;}
+.csub{font-size:.92rem;color:var(--mid);line-height:1.8;margin-bottom:2.6rem;}
+.clinks{display:flex;flex-direction:column;gap:1px;background:rgba(0,212,255,.05);}
+.clink{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.3rem;background:rgba(6,13,31,.88);text-decoration:none;transition:all .2s;border-left:2px solid transparent;}
+.clink:hover{background:rgba(10,20,50,.95);border-left-color:var(--cyan);}
+.cll{font-family:"Share Tech Mono",monospace;font-size:.5rem;letter-spacing:.2em;color:var(--dim);}
+.clv{font-size:.88rem;color:var(--cyan);}
+.cla{font-family:"Orbitron",monospace;font-size:.52rem;color:var(--dim);transition:color .2s;}
+.clink:hover .cla{color:var(--cyan);}
+
+footer{padding:1.7rem 6vw;border-top:1px solid rgba(0,212,255,.07);display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;background:rgba(6,13,31,.96);}
+.fl{font-family:"Orbitron",monospace;font-size:.75rem;font-weight:900;color:var(--cyan);letter-spacing:.1em;}
+.fl span{color:var(--red);}
+.fc{font-family:"Share Tech Mono",monospace;font-size:.5rem;color:var(--dim);letter-spacing:.1em;}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(32px);transition:all .7s ease;}
+.rev.v{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.1s;}.rd2{transition-delay:.2s;}.rd3{transition-delay:.3s;}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="space-canvas"></canvas>
+
+<nav>
+  <div style="display:flex;align-items:center;">
+    <div class="nav-logo">CYBER<span>X</span></div>
+    <div class="nav-tag">SOVEREIGN CORE</div>
+  </div>
+  <div class="nav-links">
+    <a href="#about">SYSTEMS</a>
+    <a href="#projects">ARCHIVE</a>
+    <a href="#experience">MISSION LOG</a>
+    <a href="#contact">ENGAGE</a>
+  </div>
+  <a href="#contact" class="nav-cta">ENGAGE ↗</a>
+</nav>
+
+<section id="hero">
+  <div class="eline" style="top:28%;left:0;width:32%;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation-delay:0s;"></div>
+  <div class="eline" style="top:68%;right:0;width:28%;background:linear-gradient(90deg,transparent,var(--red),transparent);animation-delay:1.5s;"></div>
+  <div class="eline" style="top:45%;left:55%;width:45%;background:linear-gradient(90deg,transparent,rgba(0,212,255,.6),transparent);animation-delay:3s;"></div>
+
+  <div class="hero-left">
+    <div class="eyebrow">TELEMETRY LINK — LIVE</div>
+    <div class="hname">SARIA<br/>AMINE</div>
+    <div class="htag">AI · Network Automation · Security Engineer</div>
+    <div class="quote-box">
+      <div class="qtext">"I don't just connect systems.<br/>I make them think."</div>
+      <div class="qattr">SARIA AMINE — CYBERX — 2026</div>
+    </div>
+    <div class="cta">
+      <a href="#projects" class="btn-p">VIEW ARCHIVE</a>
+      <a href="#contact" class="btn-g">ENGAGE ↗</a>
+    </div>
+  </div>
+
+  <div class="photo-wrap" id="photo-wrap">
+    <div class="photo-glow"></div>
+    <div class="hc tl"></div><div class="hc tr"></div>
+    <div class="hc bl"></div><div class="hc br"></div>
+    <img class="hero-photo" id="hero-photo" src="./amine.jpg" alt="Saria Amine"/>
+  </div>
+
+  <div class="hero-right">
+    <div class="hud"><div class="hl">PROJECTS DEPLOYED</div><div class="hv">09</div><div class="hs">ACTIVE SYSTEMS</div><div class="hbar"><div class="hbar-f" style="--w:90%;"></div></div></div>
+    <div class="hud"><div class="hl">CERTIFICATIONS</div><div class="hv">11</div><div class="hs">VERIFIED CREDENTIALS</div><div class="hbar"><div class="hbar-f" style="--w:100%;"></div></div></div>
+    <div class="hud"><div class="hl">DOMAINS</div><div class="hv">03</div><div class="hs">AI · NET · SEC</div><div class="hbar"><div class="hbar-f" style="--w:60%;"></div></div></div>
+    <div class="hud" style="border-color:rgba(255,51,0,.2);"><div class="hl" style="color:var(--red);">NEXUS ACADEMY</div><div class="hv" style="color:var(--red);font-size:.8rem;">FOUNDER</div><div class="hs">ALGERIA · 2026</div></div>
+  </div>
+  <div class="scroll-h"><span>SCROLL ↓</span><div class="scroll-l"></div></div>
+</section>
+
+<section id="transition">
+  <div class="eline" style="top:35%;left:0;width:20%;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation-delay:.7s;"></div>
+  <div class="eline" style="top:60%;right:0;width:16%;background:linear-gradient(90deg,transparent,var(--red),transparent);animation-delay:2.2s;"></div>
+  <div class="tt">
+    <div class="t1" id="tl1">PROTOCOL — NX LXXXIV // CYBERX</div>
+    <div class="t2" id="tl2">I don't just connect<br/>systems. I make them<br/><span class="glow">think.</span></div>
+    <div class="t3" id="tl3">Networks · Security · Artificial Intelligence — engineered beyond limits.</div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="sw">
+    <div class="eline" style="top:10%;right:0;width:13%;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation-delay:1.1s;"></div>
+    <div class="seye rev">ABOUT THE ENGINEER</div>
+    <h2 class="stitle rev rd1">The Engineer Who Builds <span class="ac">Intelligence.</span></h2>
+    <div class="ag">
+      <div class="at rev rd2">
+        <p>I'm a <strong>Network Automation & Security Engineer</strong> based in Algeria — but I operate without borders. I don't just configure networks or write scripts. I architect intelligent systems that think, respond, and evolve.</p>
+        <p>From penetrating live enterprise labs to deploying <strong>ERP AI agents in production</strong> — from building a 6-phase autonomous SOAR system (AEGIS) to developing full-stack ERP platforms for real businesses — I operate at the intersection of networks, security, and artificial intelligence.</p>
+        <p>This isn't a portfolio. It's a <strong>proof of work</strong>. Every project here was built, deployed, and documented. No fakes. No templates. No limits.</p>
+      </div>
+      <div class="as rev rd3">
+        <div class="sb"><div class="sn" id="s1">00</div><div class="sl">PROJECTS BUILT</div></div>
+        <div class="sb"><div class="sn" id="s2">00</div><div class="sl">CERTIFICATIONS</div></div>
+        <div class="sb"><div class="sn" id="s3">00</div><div class="sl">CORE DOMAINS</div></div>
+        <div class="sb"><div class="sn" id="s4">00</div><div class="sl">ACADEMY FOUNDED</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="sw">
+    <div class="eline" style="top:4%;left:0;width:16%;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation-delay:.9s;"></div>
+    <div class="eline" style="top:52%;right:0;width:14%;background:linear-gradient(90deg,transparent,var(--red),transparent);animation-delay:2.6s;"></div>
+    <div class="seye rev">FLIGHT LOG — ARCHIVED</div>
+    <h2 class="stitle rev rd1">The <span class="ac">Archive.</span></h2>
+    <div class="pg">
+      <div class="pc rev"><div class="pnum">01</div><div class="pst live">● LIVE</div><div class="pcat">AI · AUTOMATION</div><div class="pname">JARVIS / CYBX</div><div class="psub">ERP AI Agent — Live Enterprise Integration</div><div class="pdesc">Full-stack AI Agent connecting n8n Cloud + Groq LLaMA 3.3 70B to a live Odoo ERP via REST API. Handles HR, Finance & CRM in natural language. Deployed in 1 day at zero cost.</div><div class="pmets"><span class="met">377ms response</span><span class="met">$0 cost</span><span class="met">1 day build</span><span class="met">3 ERP modules</span></div><div class="pstk"><span class="stk">n8n Cloud</span><span class="stk">Groq LLaMA 3.3</span><span class="stk">Odoo ERP</span><span class="stk">REST API</span></div></div>
+
+      <div class="pc rev rd1"><div class="pnum">02</div><div class="pst done">■ COMPLETE</div><div class="pcat">NETWORKING · SECURITY</div><div class="pname">ENTERPRISE NETWORK LAB</div><div class="psub">Virtual Multi-Zone Security Infrastructure — Phases 0–7</div><div class="pdesc">Full enterprise network in VirtualBox — WAN/LAN/DMZ/MGMT zones. OPNsense firewall, Windows Server 2022 DC with AD DS, Suricata IDS. Red team: vsftpd CVE-2011-2523 exploited to root.</div><div class="pmets"><span class="met">7 phases</span><span class="met">CVE exploited</span><span class="met">Full pentest</span></div><div class="pstk"><span class="stk">OPNsense</span><span class="stk">Kali Linux</span><span class="stk">Metasploit</span><span class="stk">Win Server 2022</span></div></div>
+
+      <div class="pc rev rd2"><div class="pnum">03</div><div class="pst done">■ COMPLETE</div><div class="pcat">NETWORKING</div><div class="pname">CISCO PACKET TRACER LAB</div><div class="psub">Multi-Site Enterprise — HQ Mila & Constantine</div><div class="pdesc">8-VLAN topology with OSPF multi-site routing, PAT internet access, extended ACL policies, centralized DHCP and SSH-secured management. Zero packet loss across both sites.</div><div class="pmets"><span class="met">8 VLANs</span><span class="met">0% packet loss</span><span class="met">2 sites</span></div><div class="pstk"><span class="stk">Cisco IOS</span><span class="stk">OSPF</span><span class="stk">NAT/PAT</span><span class="stk">ACLs</span></div></div>
+
+      <div class="pc rev"><div class="pnum">04</div><div class="pst done">■ COMPLETE</div><div class="pcat">AI · SECURITY · SOAR</div><div class="pname">AEGIS</div><div class="psub">Autonomous Evolving Guardian & Intrusion Sentinel — 6 Phases</div><div class="pdesc">Full cognitive SOAR system. 6-phase pipeline: Scapy packet sniffer → Redis behavioral scoring → Groq LLaMA AI threat analysis → n8n Telegram alerts → OPNsense autonomous block → Cisco DNA Center fabric response. Packet to block in under 5 seconds.</div><div class="pmets"><span class="met">6 phases</span><span class="met">100% autonomous</span><span class="met">&lt;5s response</span></div><div class="pstk"><span class="stk">Python/Scapy</span><span class="stk">Redis</span><span class="stk">Groq LLaMA</span><span class="stk">n8n Docker</span><span class="stk">OPNsense API</span></div></div>
+
+      <div class="pc rev rd1"><div class="pnum">05</div><div class="pst live">● LIVE</div><div class="pcat">FULL-STACK · ERP</div><div class="pname">Z-ERP</div><div class="psub">Internal Business Management Platform — ETS Zaimi</div><div class="pdesc">Custom ERP built and deployed for ETS Zaimi. Covers inventory, orders, CRM, finance, reporting. PostgreSQL triggers, trilingual (FR/EN/AR) with RTL, dark mode, multi-currency, PDF invoices, Excel export.</div><div class="pmets"><span class="met">Live production</span><span class="met">SQL triggers</span><span class="met">FR/EN/AR</span><span class="met">PDF invoices</span></div><div class="pstk"><span class="stk">Next.js 14</span><span class="stk">TypeScript</span><span class="stk">Supabase</span><span class="stk">PostgreSQL</span><span class="stk">Vercel</span></div></div>
+
+      <div class="pc rev rd2"><div class="pnum">06</div><div class="pst prog">◆ IN PROGRESS</div><div class="pcat">AI · SECURITY · RESEARCH</div><div class="pname">CYBERSHIELD-PRESS</div><div class="psub">AI Cyberattack Detection for Digital Journalism</div><div class="pdesc">Bilingual AR/EN AI security system. 5 detection modules: DDoS (LSTM), APT (GNN), Phishing NLP (AraBERT), Deepfake (EfficientNet), Insider Threat (UEBA). React dashboard. PhD-grade research.</div><div class="pmets"><span class="met">&gt;98% DDoS accuracy</span><span class="met">5 AI modules</span><span class="met">AR/EN</span></div><div class="pstk"><span class="stk">TensorFlow</span><span class="stk">AraBERT</span><span class="stk">FastAPI</span><span class="stk">AWS</span></div></div>
+
+      <div class="pc rev"><div class="pnum">07</div><div class="pst prog">◆ IN PROGRESS</div><div class="pcat">ENTREPRENEURSHIP</div><div class="pname">NEXUS ACADEMY</div><div class="psub">IT Training Center — NESDA Business Plan</div><div class="pdesc">Full NESDA-compliant business plan for a physical IT training center in Algiers. Cisco labs, Pearson VUE exam center. 15M DZD via Islamic Murabaha/Ijara financing (Al Baraka / Al Salam Bank).</div><div class="pmets"><span class="met">15M DZD plan</span><span class="met">Pearson VUE</span><span class="met">Islamic finance</span></div><div class="pstk"><span class="stk">NESDA</span><span class="stk">Cisco Labs</span><span class="stk">Pearson VUE</span></div></div>
+
+      <div class="pc rev rd1"><div class="pnum">08</div><div class="pst done">■ COMPLETE</div><div class="pcat">TECHNICAL WRITING</div><div class="pname">NETWORKING ENCYCLOPEDIA</div><div class="psub">75 Protocols · 8 Parts · Professional Reference</div><div class="pdesc">Comprehensive engineering reference covering 75 networking protocols across 8 structured parts. CCNA-through-CCIE knowledge bridge authored in Cisco aesthetic.</div><div class="pmets"><span class="met">75 protocols</span><span class="met">8 parts</span><span class="met">Cisco aesthetic</span></div><div class="pstk"><span class="stk">TCP/IP</span><span class="stk">Routing</span><span class="stk">Security</span></div></div>
+
+      <div class="pc rev rd2"><div class="pnum">09</div><div class="pst done">■ COMPLETE</div><div class="pcat">EDUCATION</div><div class="pname">CYBERSECURITY LECTURE</div><div class="psub">Safe Digital Content Creation — Constantine 3</div><div class="pdesc">Cinematic cybersecurity lecture at Université Constantine 3. Dark cyberpunk aesthetic, glassmorphism cards, real background photos. Topic: Safe Digital Content Creation for journalism students.</div><div class="pmets"><span class="met">University lecture</span><span class="met">Cinematic design</span><span class="met">Constantine 3</span></div><div class="pstk"><span class="stk">pptxgenjs</span><span class="stk">Cyberpunk UI</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="sw">
+    <div class="eline" style="top:8%;left:0;width:10%;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation-delay:1.4s;"></div>
+    <div class="seye rev">THE ARSENAL</div>
+    <h2 class="stitle rev rd1">Weapons of <span class="ac">Choice.</span></h2>
+    <div class="skg">
+      <div class="skc rev"><div class="skcn">NETWORKING</div><div class="ski"><div class="skd"></div><span class="skn">Cisco IOS · Packet Tracer · GNS3</span></div><div class="ski"><div class="skd"></div><span class="skn">VLANs · Trunking · STP · Inter-VLAN</span></div><div class="ski"><div class="skd"></div><span class="skn">OSPF · BGP · Routing Protocols</span></div><div class="ski"><div class="skd"></div><span class="skn">NAT/PAT · ACLs · DHCP · SSH v2</span></div><div class="ski"><div class="skd"></div><span class="skn">OPNsense · DMZ · Firewall Engineering</span></div></div>
+      <div class="skc rev rd1"><div class="skcn">SECURITY</div><div class="ski"><div class="skd"></div><span class="skn">Penetration Testing · Red Team</span></div><div class="ski"><div class="skd"></div><span class="skn">Metasploit · Kali Linux · CVE Exploitation</span></div><div class="ski"><div class="skd"></div><span class="skn">Suricata IDS · SIEM · SOAR</span></div><div class="ski"><div class="skd"></div><span class="skn">MITRE ATT&CK Framework</span></div><div class="ski"><div class="skd"></div><span class="skn">Digital Forensics · OSINT</span></div></div>
+      <div class="skc rev rd2"><div class="skcn">AI & AUTOMATION</div><div class="ski"><div class="skd"></div><span class="skn">n8n Workflows · SOAR · AI Agents</span></div><div class="ski"><div class="skd"></div><span class="skn">Groq LLaMA 3.3 70B · Claude API</span></div><div class="ski"><div class="skd"></div><span class="skn">LLM Integration · Prompt Engineering</span></div><div class="ski"><div class="skd"></div><span class="skn">AraBERT · NLP · TensorFlow</span></div><div class="ski"><div class="skd"></div><span class="skn">FastAPI · REST API · JSON-RPC</span></div></div>
+      <div class="skc rev"><div class="skcn">INFRASTRUCTURE</div><div class="ski"><div class="skd"></div><span class="skn">Windows Server 2022 · AD DS</span></div><div class="ski"><div class="skd"></div><span class="skn">Linux Admin · Kali · Ubuntu</span></div><div class="ski"><div class="skd"></div><span class="skn">Docker · AWS · VirtualBox</span></div><div class="ski"><div class="skd"></div><span class="skn">Supabase · PostgreSQL · Redis</span></div><div class="ski"><div class="skd"></div><span class="skn">Cisco DNA Center · RESTCONF</span></div></div>
+      <div class="skc rev rd1"><div class="skcn">DEVELOPMENT</div><div class="ski"><div class="skd"></div><span class="skn">Python 3 · OOP · Scapy</span></div><div class="ski"><div class="skd"></div><span class="skn">Next.js 14 · React · TypeScript</span></div><div class="ski"><div class="skd"></div><span class="skn">Bash · Shell Scripting</span></div><div class="ski"><div class="skd"></div><span class="skn">Git · GitHub · Vercel · CI/CD</span></div><div class="ski"><div class="skd"></div><span class="skn">jsPDF · SheetJS · Recharts</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="sw">
+    <div class="eline" style="top:5%;right:0;width:18%;background:linear-gradient(90deg,transparent,var(--red),transparent);animation-delay:.4s;"></div>
+    <div class="seye rev">MISSION LOG</div>
+    <h2 class="stitle rev rd1">Experience & <span class="ac">Credentials.</span></h2>
+    <div class="eg">
+      <div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.2em;color:var(--cyan);margin-bottom:1.2rem;" class="rev">EXPERIENCE</div>
+        <div class="tl">
+          <div class="tli rev"><div class="tld gold"></div><div class="tly">2026 — PRESENT <span class="tlbadge">CURRENT</span></div><div class="tlr">IT System Lab Manager</div><div class="tlo">ETS Zaimi — Laboratoire des Systèmes Informatiques</div><div class="tldesc">Manages IT lab infrastructure at ETS Zaimi. Designed and deployed Z-ERP — a full custom ERP platform (Next.js 14, Supabase, PostgreSQL) for internal business management covering inventory, CRM, finance and reporting.</div></div>
+          <div class="tli rev rd1"><div class="tld"></div><div class="tly">2026</div><div class="tlr">IT Officer</div><div class="tlo">BellaCeram</div><div class="tldesc">Built and deployed JARVIS — a live ERP AI Agent (n8n + Groq LLaMA + Odoo) as a working enterprise AI automation demonstration for the company's IT infrastructure.</div></div>
+          <div class="tli rev rd2"><div class="tld"></div><div class="tly">2025–2026</div><div class="tlr">Instructor</div><div class="tlo">Université Constantine 3 — Salah Boubnider</div><div class="tldesc">Delivered technical cybersecurity lectures. Developed cinematic educational materials covering OSINT, digital threats, and platform security for journalism and media students.</div></div>
+          <div class="tli rev"><div class="tld r"></div><div class="tly">2026 — PRESENT</div><div class="tlr">Founder</div><div class="tlo" style="color:var(--red);">NEXUS ACADEMY</div><div class="tldesc">Designing Algeria's next-generation IT training center — Cisco labs, Pearson VUE exam center, multi-vendor certifications. Full NESDA business plan completed with Islamic financing structure.</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.2em;color:var(--cyan);margin-bottom:1.2rem;" class="rev">CERTIFICATIONS</div>
+        <div class="cl">
+          <div class="cr rev"><span class="cn">CyberOps Associate</span><span class="cb cisco">CISCO</span></div>
+          <div class="cr rev rd1"><span class="cn">DevNet Associate</span><span class="cb cisco">CISCO</span></div>
+          <div class="cr rev rd2"><span class="cn">Network Security</span><span class="cb cisco">CISCO</span></div>
+          <div class="cr rev"><span class="cn">Network Support & Security</span><span class="cb cisco">CISCO</span></div>
+          <div class="cr rev rd1"><span class="cn">Network Technician Career Path</span><span class="cb cisco">CISCO</span></div>
+          <div class="cr rev rd2"><span class="cn">Introduction to Cybersecurity</span><span class="cb cisco">CISCO</span></div>
+          <div class="cr rev"><span class="cn">Ethical Hacking: Penetration Testing</span><span class="cb oth">SOCODE</span></div>
+          <div class="cr rev rd1"><span class="cn">Programming with Python</span><span class="cb oth">SOCODE</span></div>
+          <div class="cr rev rd2"><span class="cn">Intro to Claude Cowork</span><span class="cb anth">ANTHROPIC</span></div>
+          <div class="cr rev"><span class="cn">AI Fluency: Frameworks & Foundations</span><span class="cb anth">ANTHROPIC</span></div>
+          <div class="cr rev rd1"><span class="cn">Building with the Claude API</span><span class="cb anth">ANTHROPIC</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="sw">
+    <div class="eline" style="top:20%;left:0;width:15%;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation-delay:1.9s;"></div>
+    <div class="eline" style="top:70%;right:0;width:13%;background:linear-gradient(90deg,transparent,var(--red),transparent);animation-delay:3.3s;"></div>
+    <div class="seye rev">INITIATE CONTACT</div>
+    <div class="ciw">
+      <div class="cline rev rd1">Have a mission?<br/><span style="color:var(--cyan);">Let's make it</span><br/>intelligent.</div>
+      <p class="csub rev rd2">AI automation, network architecture, security infrastructure — or building the future of IT education in Algeria. I'm ready.</p>
+      <div class="clinks rev rd3">
+        <a href="mailto:vviimmxxii@gmail.com" class="clink"><span class="cll">EMAIL</span><span class="clv">vviimmxxii@gmail.com</span><span class="cla">→</span></a>
+        <a href="https://linkedin.com/in/amine-s" target="_blank" class="clink"><span class="cll">LINKEDIN</span><span class="clv">Amine S.</span><span class="cla">→</span></a>
+        <a href="https://github.com/Nova-dev1" target="_blank" class="clink"><span class="cll">GITHUB</span><span class="clv">Nova-dev1</span><span class="cla">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">CYBER<span>X</span></div>
+  <div class="fc">© 2026 · SARIA AMINE · WHERE AI & NETWORKS THINK</div>
+</footer>
+
+<script>
+// CURSOR
+const cur=document.getElementById("cursor"),ring=document.getElementById("cursor-ring");
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+"px";cur.style.top=my+"px";});
+(function ar(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+"px";ring.style.top=ry+"px";requestAnimationFrame(ar);})();
+document.querySelectorAll("a,button").forEach(el=>{
+  el.addEventListener("mouseenter",()=>{cur.style.width="18px";cur.style.height="18px";cur.style.background="#FF3300";});
+  el.addEventListener("mouseleave",()=>{cur.style.width="10px";cur.style.height="10px";cur.style.background="var(--cyan)";});
+});
+
+// SPACE CANVAS
+(function(){
+  const c=document.getElementById("space-canvas");
+  const ctx=c.getContext("2d");
+  function resize(){
+    c.width=window.innerWidth;
+    c.height=Math.max(document.body.scrollHeight,window.innerHeight);
+  }
+  resize();
+  window.addEventListener("resize",resize);
+  new ResizeObserver(resize).observe(document.body);
+
+  const W=()=>c.width, H=()=>c.height;
+
+  // STARS
+  const stars=Array.from({length:320},()=>({
+    x:Math.random(),y:Math.random(),
+    r:Math.random()*1.4+.2,
+    a:Math.random()*.7+.15,
+    twinkle:Math.random()*Math.PI*2,
+    speed:Math.random()*.02+.005
+  }));
+
+  // NETWORK PARTICLES (cyan dots with connections)
+  const pts=Array.from({length:120},()=>({
+    x:Math.random()*window.innerWidth,
+    y:Math.random()*Math.max(document.body.scrollHeight,window.innerHeight),
+    vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,
+    r:Math.random()*.9+.2,a:Math.random()*.25+.04,
+    col:Math.random()>.75?"204,34,0":"0,212,255"
+  }));
+
+  // LIGHTNING BOLTS
+  const bolts=[];
+  setInterval(()=>{
+    if(bolts.length>10)return;
+    const x1=Math.random()*W(),y1=Math.random()*H();
+    bolts.push({x1,y1,x2:x1+(Math.random()-.5)*260,y2:y1+(Math.random()-.5)*180,life:1,col:Math.random()>.5?"0,212,255":"204,34,0"});
+  },700);
+
+  // NEBULA CLOUDS — painted once, reused
+  function drawNebula(){
+    const clouds=[
+      {x:.18,y:.12,rx:W()*.35,ry:H()*.18,c1:"rgba(0,100,200,.06)",c2:"rgba(60,0,120,.04)"},
+      {x:.72,y:.08,rx:W()*.25,ry:H()*.12,c1:"rgba(0,180,255,.04)",c2:"rgba(0,80,160,.03)"},
+      {x:.08,y:.45,rx:W()*.28,ry:H()*.2,c1:"rgba(80,0,180,.05)",c2:"rgba(0,120,220,.03)"},
+      {x:.85,y:.35,rx:W()*.22,ry:H()*.15,c1:"rgba(0,150,200,.04)",c2:"rgba(40,0,100,.03)"},
+      {x:.5,y:.7,rx:W()*.4,ry:H()*.16,c1:"rgba(0,80,180,.05)",c2:"rgba(80,20,140,.04)"},
+      {x:.25,y:.85,rx:W()*.3,ry:H()*.12,c1:"rgba(180,60,0,.03)",c2:"rgba(120,30,0,.02)"},
+      {x:.78,y:.78,rx:W()*.25,ry:H()*.14,c1:"rgba(0,140,220,.04)",c2:"rgba(60,0,140,.03)"},
+    ];
+    clouds.forEach(cl=>{
+      const grd=ctx.createRadialGradient(cl.x*W(),cl.y*H(),0,cl.x*W(),cl.y*H(),Math.max(cl.rx,cl.ry));
+      grd.addColorStop(0,cl.c1);
+      grd.addColorStop(.5,cl.c2);
+      grd.addColorStop(1,"transparent");
+      ctx.save();
+      ctx.scale(cl.rx/Math.max(cl.rx,cl.ry),cl.ry/Math.max(cl.rx,cl.ry));
+      ctx.fillStyle=grd;
+      ctx.fillRect(0,0,W()/Math.min(1,cl.rx/Math.max(cl.rx,cl.ry)),H()/Math.min(1,cl.ry/Math.max(cl.rx,cl.ry)));
+      ctx.restore();
+    });
+  }
+
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,W(),H());
+
+    // Deep space base gradient
+    const base=ctx.createLinearGradient(0,0,W(),H());
+    base.addColorStop(0,"rgba(4,8,22,1)");
+    base.addColorStop(.3,"rgba(6,10,28,1)");
+    base.addColorStop(.6,"rgba(8,6,24,1)");
+    base.addColorStop(1,"rgba(5,9,20,1)");
+    ctx.fillStyle=base;
+    ctx.fillRect(0,0,W(),H());
+
+    // Nebula
+    drawNebula();
+
+    // Stars
+    frame++;
+    stars.forEach(s=>{
+      s.twinkle+=s.speed;
+      const alpha=s.a*(0.6+0.4*Math.sin(s.twinkle));
+      ctx.beginPath();
+      ctx.arc(s.x*W(),s.y*H(),s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,220,255,${alpha})`;
+      ctx.fill();
+      // occasional star sparkle
+      if(s.r>1.1&&Math.sin(s.twinkle)>.85){
+        ctx.beginPath();
+        ctx.strokeStyle=`rgba(200,220,255,${alpha*.4})`;
+        ctx.lineWidth=.5;
+        ctx.moveTo(s.x*W()-s.r*3,s.y*H());ctx.lineTo(s.x*W()+s.r*3,s.y*H());ctx.stroke();
+        ctx.moveTo(s.x*W(),s.y*H()-s.r*3);ctx.lineTo(s.x*W(),s.y*H()+s.r*3);ctx.stroke();
+      }
+    });
+
+    // Network particles
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W())p.vx*=-1;
+      if(p.y<0||p.y>H())p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${p.col},${p.a})`;ctx.fill();
+    });
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<90){
+          ctx.beginPath();
+          ctx.strokeStyle=`rgba(0,180,255,${.04*(1-d/90)})`;
+          ctx.lineWidth=.4;ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke();
+        }
+      }
+    }
+
+    // Lightning bolts
+    for(let i=bolts.length-1;i>=0;i--){
+      const b=bolts[i];
+      ctx.beginPath();ctx.strokeStyle=`rgba(${b.col},${b.life*.65})`;
+      ctx.lineWidth=b.life*1.6;ctx.shadowColor=`rgba(${b.col},${b.life})`;ctx.shadowBlur=14;
+      ctx.moveTo(b.x1,b.y1);
+      for(let s=1;s<=9;s++){const t=s/9;ctx.lineTo(b.x1+(b.x2-b.x1)*t+(Math.random()-.5)*38,b.y1+(b.y2-b.y1)*t+(Math.random()-.5)*28);}
+      ctx.lineTo(b.x2,b.y2);ctx.stroke();ctx.shadowBlur=0;
+      b.life-=.03;if(b.life<=0)bolts.splice(i,1);
+    }
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// PHOTO PARALLAX
+const photo=document.getElementById("hero-photo");
+if(photo){document.addEventListener("mousemove",e=>{const cx=window.innerWidth/2,cy=window.innerHeight/2;photo.style.transform=`translate(${(e.clientX-cx)/cx*10}px,${(e.clientY-cy)/cy*7}px) scale(1.02)`;});}
+
+// REVEAL
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add("v");});},{threshold:.1});
+document.querySelectorAll(".rev").forEach(el=>obs.observe(el));
+
+// TRANSITION TEXT
+const tObs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){["tl1","tl2","tl3"].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add("v");});}});},{threshold:.3});
+const tr=document.getElementById("transition");if(tr)tObs.observe(tr);
+
+// COUNTER
+function animCount(el,target,dur=1800){let st=null;const step=ts=>{if(!st)st=ts;const p=Math.min((ts-st)/dur,1);el.textContent=String(Math.floor(p*target)).padStart(2,"0");if(p<1)requestAnimationFrame(step);};requestAnimationFrame(step);}
+const stObs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){animCount(document.getElementById("s1"),9);animCount(document.getElementById("s2"),11);animCount(document.getElementById("s3"),3);animCount(document.getElementById("s4"),1);stObs.disconnect();}});},{threshold:.4});
+const ab=document.querySelector(".as");if(ab)stObs.observe(ab);
+</script>
+</body>
+</html>
